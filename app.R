@@ -37,7 +37,7 @@ options = list(placeholder = "Type in a county, city, or place to see graphs", m
 
 hr(),
 
-p("This interface was made with ",
+p("This interface was made originally by Eddie Hunsinger with the California Department of Finance using ",
 tags$a(href="https://shiny.rstudio.com/", 
 	"Shiny for R."),
 tags$a(href="https://github.com/robkemp/DP2010DemoDataReview", 
