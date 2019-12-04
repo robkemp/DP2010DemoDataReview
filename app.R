@@ -30,19 +30,22 @@ hr(),
 sidebarLayout(
 sidebarPanel(
 
-selectizeInput(inputId = "Area", label = "County, city, or census designated place (CDP)", 
+selectizeInput(inputId = "Area", label = "Washington county, city, or census designated place (CDP)", 
 choices = Names[,],
 options = list(placeholder = "Type in a county, city, or place to see graphs", multiple = TRUE, maxOptions = 5000, onInitialize = I('function() { this.setValue(""); }'))
 ),
 
 hr(),
 
-p("This interface was made originally by Eddie Hunsinger with the California Department of Finance using ",
+p("This interface was made using ",
 tags$a(href="https://shiny.rstudio.com/", 
-	"Shiny for R."),
+	"Shiny for R."), " Related ",
 tags$a(href="https://github.com/robkemp/DP2010DemoDataReview", 
-	"Related GitHub repository."),
+	"GitHub repository."),
 "December 2019."),
+br(),
+p("Originally designed by", 
+  tags$a(href="https://edyhsgr.github.io/eddieh/", "Eddie Hunsinger.")),
 
 width=3
 ),
