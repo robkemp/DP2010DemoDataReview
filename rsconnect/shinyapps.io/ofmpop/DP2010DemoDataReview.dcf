@@ -1,0 +1,13 @@
+name: DP2010DemoDataReview
+title: DP2010DemoDataReview
+username:
+account: ofmpop
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1563100
+bundleId: 2641719
+url: https://ofmpop.shinyapps.io/DP2010DemoDataReview/
+when: 1575494592.91018
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: long_dp14_050and160_WA.csv|long_dp14_codebook.txt
