@@ -5,6 +5,7 @@
 #
 #EDDIE HUNSINGER, NOVEMBER 2019
 #https://edyhsgr.github.io/eddieh/
+#   Edited by Rob Kemp (robert.kemp@ofm.wa.gov)
 #
 #THERE IS NO WARRANTY FOR THIS CODE
 #THIS CODE HAS NOT BEEN TESTED AT ALL-- PLEASE LET ME KNOW IF YOU FIND ANY PROBLEMS (edyhsgr@gmail.com)
@@ -12,12 +13,12 @@
 
 library(shiny)
 
-Names<-read.table(file="https://raw.githubusercontent.com/edyhsgr/DP2010DemoDataReview_CA/master/PlaceAndCountyNames_DP2010DemonstrationProducts_CA.csv",header=FALSE,sep=",")
+Names<-read.csv(file="PlaceAndCountyNames_DP2010DemonstrationProducts_WA.csv",header=FALSE, stringsAsFactors = FALSE)
 
 ui<-fluidPage(
 
-	tags$h3("Review of U.S. Census Bureau's 2010 Demonstration Data Products: Population by Demographic Characteristics, California Counties, Cities, and Places"),
-	p("U.S. Census Bureau data downloaded November 8, 2019 from ",
+	tags$h3("Review of U.S. Census Bureau's 2010 Demonstration Data Products: Population by Demographic Characteristics, Washington Counties, Cities, and Places"),
+	p("U.S. Census Bureau data downloaded December 4, 2019 from ",
 	tags$a(href="https://www.nhgis.org/differentially-private-2010-census-data", "IPUMS NHGIS, University of Minnesota."),
 	"",
 	tags$a(href="", 
@@ -39,9 +40,9 @@ hr(),
 p("This interface was made with ",
 tags$a(href="https://shiny.rstudio.com/", 
 	"Shiny for R."),
-tags$a(href="https://github.com/edyhsgr/DP2010DemoDataReview", 
+tags$a(href="https://github.com/robkemp/DP2010DemoDataReview", 
 	"Related GitHub repository."),
-"November 2019."),
+"December 2019."),
 
 width=3
 ),
@@ -53,7 +54,7 @@ mainPanel(
 )
 
 #HousingData<-read.table(file="https://raw.githubusercontent.com/edyhsgr/DP2010DemoDataReview_CA/master/long_dp14_160_CA.csv",header=TRUE,sep=",")
-PopData<-read.table(file="https://raw.githubusercontent.com/edyhsgr/DP2010DemoDataReview_CA/master/long_dp1_050and160_CA.csv",header=TRUE,sep=",")
+PopData<-read.csv(file="long_dp1_050and160_WA.csv",header=TRUE,sep=",")
 
 server<-function(input, output) {	
 	output$plots<-renderPlot({
