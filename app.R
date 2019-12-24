@@ -1,17 +1,16 @@
 ##########
-#US CENSUS BUREAU DIFFERENTIAL PRIVACY 2010 DEMONSTRATION DATA FOR CALIFORNIA
+#US CENSUS BUREAU DIFFERENTIAL PRIVACY 2010 DEMONSTRATION DATA FOR WASHINGTON
 #
-#DATA DOWNLOADED NOVEMBER 8, 2019 FROM IPUMS NHGIS, UNIVERSITY OF MINNESOTA: https://www.nhgis.org/differentially-private-2010-census-data
+#DATA DOWNLOADED December 4, 2019 FROM IPUMS NHGIS, UNIVERSITY OF MINNESOTA: https://www.nhgis.org/differentially-private-2010-census-data
 #
-#EDDIE HUNSINGER, NOVEMBER 2019
-#https://edyhsgr.github.io/eddieh/
-#   Edited by Rob Kemp (robert.kemp@ofm.wa.gov)
-#
-#THERE IS NO WARRANTY FOR THIS CODE
-#THIS CODE HAS NOT BEEN TESTED AT ALL-- PLEASE LET ME KNOW IF YOU FIND ANY PROBLEMS (edyhsgr@gmail.com)
+#Rob Kemp (robert.kemp@ofm.wa.gov), December 2019
+#https://github.com/robkemp
 ##########
 
 library(shiny)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
 
 Names<-read.csv(file="PlaceAndCountyNames_DP2010DemonstrationProducts_WA.csv",header=FALSE, stringsAsFactors = FALSE)
 
@@ -43,9 +42,6 @@ tags$a(href="https://shiny.rstudio.com/",
 tags$a(href="https://github.com/robkemp/DP2010DemoDataReview", 
 	"GitHub repository."),
 "December 2019."),
-br(),
-p("Originally designed by", 
-  tags$a(href="https://edyhsgr.github.io/eddieh/", "Eddie Hunsinger.")),
 
 width=3
 ),
@@ -59,80 +55,53 @@ mainPanel(
 #HousingData<-read.table(file="https://raw.githubusercontent.com/edyhsgr/DP2010DemoDataReview_CA/master/long_dp14_160_CA.csv",header=TRUE,sep=",")
 PopData<-read.csv(file="long_dp1_050and160_WA.csv",header=TRUE,sep=",")
 
+# Add in a couple of helper functions
+"%!in%" <- Negate("%in%") # operator to ask for all items in a vector not in supplied vector
+abs_comma <- function (x, ...) {
+  format(abs(x), ..., big.mark = ",", scientific = FALSE, trim = TRUE)
+} # Allows the labels command in scale_y_continuous to take the absolute value and use commas
+
 server<-function(input, output) {	
 	output$plots<-renderPlot({
 par(mfrow=c(2,2)) #,mai=c(0.5,0.5,0.5,0.5))
 
-AgeMale<-subset(PopData, PopData$name_sf==input$Area & 
-(PopData$var_code=="H76003" | 
-PopData$var_code=="H76004" |
-PopData$var_code=="H76005" |
-PopData$var_code=="H76006" |
-PopData$var_code=="H76007" |
-PopData$var_code=="H76008" |
-PopData$var_code=="H76009" |
-PopData$var_code=="H76010" |
-PopData$var_code=="H76011" |
-PopData$var_code=="H76012" |
-PopData$var_code=="H76013" |
-PopData$var_code=="H76014" |
-PopData$var_code=="H76015" |
-PopData$var_code=="H76016" |
-PopData$var_code=="H76017" |
-PopData$var_code=="H76018" |
-PopData$var_code=="H76019" |
-PopData$var_code=="H76020" |
-PopData$var_code=="H76021" |
-PopData$var_code=="H76022" |
-PopData$var_code=="H76023" |
-PopData$var_code=="H76024" |
-PopData$var_code=="H76025")
-)
-AgeMale$sf[AgeMale$var_code=="H76006"]<-sum(AgeMale$sf[AgeMale$var_code=="H76006"],AgeMale$sf[AgeMale$var_code=="H76007"])
-AgeMale$sf[AgeMale$var_code=="H76008"]<-sum(AgeMale$sf[AgeMale$var_code=="H76008"],AgeMale$sf[AgeMale$var_code=="H76009"],AgeMale$sf[AgeMale$var_code=="H76010"])
-AgeMale$sf[AgeMale$var_code=="H76018"]<-sum(AgeMale$sf[AgeMale$var_code=="H76018"],AgeMale$sf[AgeMale$var_code=="H76019"])
-AgeMale$sf[AgeMale$var_code=="H76020"]<-sum(AgeMale$sf[AgeMale$var_code=="H76020"],AgeMale$sf[AgeMale$var_code=="H76021"])
-AgeMale$dp[AgeMale$var_code=="H76006"]<-sum(AgeMale$dp[AgeMale$var_code=="H76006"],AgeMale$dp[AgeMale$var_code=="H76007"])
-AgeMale$dp[AgeMale$var_code=="H76008"]<-sum(AgeMale$dp[AgeMale$var_code=="H76008"],AgeMale$dp[AgeMale$var_code=="H76009"],AgeMale$dp[AgeMale$var_code=="H76010"])
-AgeMale$dp[AgeMale$var_code=="H76018"]<-sum(AgeMale$dp[AgeMale$var_code=="H76018"],AgeMale$dp[AgeMale$var_code=="H76019"])
-AgeMale$dp[AgeMale$var_code=="H76020"]<-sum(AgeMale$dp[AgeMale$var_code=="H76020"],AgeMale$dp[AgeMale$var_code=="H76021"])
-AgeMale<-AgeMale[-c(5,7,8,17,19),]
+# Format and subset the data
 
-AgeFemale<-subset(PopData, PopData$name_sf==input$Area & 
-(PopData$var_code=="H76027" | 
-PopData$var_code=="H76028" |
-PopData$var_code=="H76029" |
-PopData$var_code=="H76030" |
-PopData$var_code=="H76031" |
-PopData$var_code=="H76032" |
-PopData$var_code=="H76033" |
-PopData$var_code=="H76034" |
-PopData$var_code=="H76035" |
-PopData$var_code=="H76036" |
-PopData$var_code=="H76037" |
-PopData$var_code=="H76038" |
-PopData$var_code=="H76039" |
-PopData$var_code=="H76040" |
-PopData$var_code=="H76041" |
-PopData$var_code=="H76042" |
-PopData$var_code=="H76043" |
-PopData$var_code=="H76044" |
-PopData$var_code=="H76045" |
-PopData$var_code=="H76046" |
-PopData$var_code=="H76047" |
-PopData$var_code=="H76048" |
-PopData$var_code=="H76049")
-)
-AgeFemale$sf[AgeFemale$var_code=="H76030"]<-sum(AgeFemale$sf[AgeFemale$var_code=="H76030"],AgeFemale$sf[AgeFemale$var_code=="H76031"])
-AgeFemale$sf[AgeFemale$var_code=="H76032"]<-sum(AgeFemale$sf[AgeFemale$var_code=="H76032"],AgeFemale$sf[AgeFemale$var_code=="H76033"],AgeFemale$sf[AgeFemale$var_code=="H76034"])
-AgeFemale$sf[AgeFemale$var_code=="H76042"]<-sum(AgeFemale$sf[AgeFemale$var_code=="H76042"],AgeFemale$sf[AgeFemale$var_code=="H76043"])
-AgeFemale$sf[AgeFemale$var_code=="H76044"]<-sum(AgeFemale$sf[AgeFemale$var_code=="H76044"],AgeFemale$sf[AgeFemale$var_code=="H76045"])
-AgeFemale$dp[AgeFemale$var_code=="H76030"]<-sum(AgeFemale$dp[AgeFemale$var_code=="H76030"],AgeFemale$dp[AgeFemale$var_code=="H76031"])
-AgeFemale$dp[AgeFemale$var_code=="H76032"]<-sum(AgeFemale$dp[AgeFemale$var_code=="H76032"],AgeFemale$dp[AgeFemale$var_code=="H76033"],AgeFemale$dp[AgeFemale$var_code=="H76034"])
-AgeFemale$dp[AgeFemale$var_code=="H76042"]<-sum(AgeFemale$dp[AgeFemale$var_code=="H76042"],AgeFemale$dp[AgeFemale$var_code=="H76043"])
-AgeFemale$dp[AgeFemale$var_code=="H76044"]<-sum(AgeFemale$dp[AgeFemale$var_code=="H76044"],AgeFemale$dp[AgeFemale$var_code=="H76045"])
-AgeFemale<-AgeFemale[-c(5,7,8,17,19),]
-
+	  #Variable Code lists to make data filtering easier
+	  male_vars=c("H76003", "H76004", "H76005", "H76006", "H76007", "H76008", "H76009", "H76010", "H76011", "H76012", "H76013", "H76014", "H76015", "H76016", "H76017", "H76018", "H76019", "H76020", "H76021", "H76022", "H76023", "H76024", "H76025")
+	  female_vars=c("H76027", "H76028", "H76029", "H76030", "H76031", "H76032", "H76033", "H76034", "H76035", "H76036", "H76037", "H76038", "H76039", "H76040", "H76041", "H76042", "H76043", "H76044", "H76045", "H76046", "H76047", "H76048", "H76049")
+	  select_vars=c(male_vars, female_vars)
+	  collapsed_vars=c("H76007", "H76009", "H76010", "H76019", "H76021", "H76031", "H76033", "H76034", "H76043", "H76045")
+	  age_vars=select_vars[select_vars%!in%collapsed_vars]
+	  agegroups=c("0-4","5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85+")
+	  
+	  # Create the Age by sex dataset
+	  ## Filter to only age, add sex, and collapse unndeed detail
+	  age_dat=PopData%>%
+	    filter(var_code%in%select_vars, name_sf==input$Area)%>%
+	    mutate(sex=ifelse(var_code%in%male_vars, "Male", "Female"),
+	           var_code=case_when(
+	             var_code=="H76007" ~ "H76006",
+	             var_code=="H76009" ~ "H76008",
+	             var_code=="H76010" ~ "H76008",
+	             var_code=="H76019" ~ "H76018",
+	             var_code=="H76021" ~ "H76020",
+	             var_code=="H76031" ~ "H76030",
+	             var_code=="H76033" ~ "H76032",
+	             var_code=="H76034" ~ "H76032",
+	             var_code=="H76043" ~ "H76042",
+	             var_code=="H76045" ~ "H76044",
+	             TRUE ~ var_code))%>%
+	    group_by(name_sf, sex, var_code)%>%
+	    summarize(dp=sum(dp),
+	              sf=sum(sf))%>%
+	    ungroup()%>%
+	    mutate(
+	      sex=ordered(sex, levels=c("Male", "Female"), labels=c("Male", "Female")),
+	      age_cat=ordered(var_code, levels=age_vars, labels=c(agegroups,agegroups)),
+	      dp=ifelse(sex=="Male", dp*-1, dp),
+	      sf=ifelse(sex=="Male", sf*-1, sf))
+	  
 ##GRAPHS
 if(input$Area=="") {
 plot.new()
@@ -141,27 +110,21 @@ legend("topleft",legend=c("Select a county, city, or place with the panel to the
 
 if(input$Area!="") {
 #Graphs 1 and 2
-agegroups<-c("0-4","5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85+")
-options(scipen = 999)
-fill_color = rgb(0,.6,.9,alpha=.5)
-
-barplot(AgeMale$dp,horiz=T,names=agegroups,space=0,xlim=c(max(AgeMale$sf)*2,0),las=1,col=fill_color,border=rgb(0,0,0,0))
-  par(new=TRUE)
-barplot(AgeMale$sf,horiz=T,names=agegroups,space=0,xlim=c(max(AgeMale$sf)*2,0),las=1,col=rgb(0,0,0,0))
-  mtext(side=1,line=3,adj=.5,text=expression("Male"),font=.7,cex=1.5)
-
-mtext(side=1,line=-55,at=0,text=paste(c("Population by Age and Sex, ", input$Area),collapse=""),font=1,cex=1.75)
-
-legend(max(AgeMale$sf)*1.85, 18, legend=c("2010 Census Data with Differential Privacy","Published 2010 Census Data"), col=c(fill_color,rgb(0,1,1,0)),border=rgb(0,0,0,0), pt.cex=2, pch=15, cex=1.5, bty ="n", y.intersp=1.25)
-legend(max(AgeMale$sf)*1.85, 18, legend=c("",""), col=c(fill_color, rgb(0,0,0)), pt.cex=2, pch=0, cex=1.5, bty ="n", y.intersp=1.25)
-
-mtext(side=1,line=6,adj=0,text=paste(c("Source: U.S. Census Bureau's 2010 Demonstration Data Products. Accessed via IPUMS NHGIS, University of Minnesota, November 2019."),collapse=""),font=.5,cex=1)
-
-barplot(AgeFemale$dp,horiz=T,names=FALSE,space=0,xlim=c(0,max(AgeMale$sf)*2),las=1,col=fill_color,border=rgb(0,0,0,0))
-  par(new=TRUE)
-barplot(AgeFemale$sf,horiz=T,names=FALSE,space=0,xlim=c(0,max(AgeMale$sf)*2),las=1,col=rgb(0,0,0,0))
-  mtext(side=1,line=3,adj=.5,text=expression("Female"),font=.7,cex=1.5)
-
+  age_dat%>%
+    ggplot(aes(x=age_cat))+
+    geom_bar(aes(y=dp, fill=sex), color="gray80", stat="identity")+
+    geom_bar(aes(y=sf), fill=NA, color="black", stat="identity")+
+    coord_flip()+
+    theme_minimal()+
+    scale_y_continuous(labels = abs_comma)+
+    scale_fill_manual(values=c("#a6cee3", "#1f78b4"), 
+                      name="Sex")+
+    labs(title=paste0("Population by Age and Sex, ", input$Area),
+         subtitle="Demonstration Product with differential privacy applied in blue",
+         x="Age",
+         y="Population",
+         caption="Source: U.S. Census Bureau's 2010 Demonstration Data Products. Accessed via IPUMS NHGIS, University of Minnesota, December 2019.")
+  
 #Graphs 3 and 4
 Race<-subset(PopData, PopData$name_sf==input$Area & (PopData$var_code=="H7Z003" #non Hisp White
 | PopData$var_code=="H7Z004" #non Hisp Black

@@ -1,6 +1,5 @@
 library(ggplot2)
 library(tidyr)
-library(plyr)
 library(dplyr)
 
 input=data.frame(Area="Aberdeen city")
@@ -54,53 +53,52 @@ age_dat_l=age_dat%>%
 
   age_dat%>%
     ggplot(aes(x=age_cat))+
-    geom_bar(aes(y=sf, fill=sex), stat="identity")+
-    geom_bar(aes(y=dp), fill=NA, color="black", stat="identity")+
-    # geom_segment(aes(x = age_cat, y = 0, xend = age_cat, yend = dp),size=1, color = "grey50") +
-    # geom_point(aes(x=age_cat, y=dp, color=sex), size=2)+
+    geom_bar(aes(y=dp, fill=sex), color="gray80", stat="identity")+
+    geom_bar(aes(y=sf), fill=NA, color="black", stat="identity")+
     coord_flip()+
-    # facet_grid(~sex)+
     theme_minimal()+
+    scale_y_continuous(labels = abs_comma)+
     scale_fill_manual(values=c("#a6cee3", "#1f78b4"), 
-                      name="Summary File 1")+
+                      name="Sex")+
     labs(title=paste0("Population by Age and Sex, ", input$Area),
+         subtitle="Demonstration Product with differential privacy applied in blue",
          x="Age",
          y="Population",
          caption="Source: U.S. Census Bureau's 2010 Demonstration Data Products. Accessed via IPUMS NHGIS, University of Minnesota, December 2019.")
 
-m=age_dat%>%
-  filter(sex=="Male")%>%
-  ggplot(aes(x=age_cat))+
-  geom_bar(aes(y=dp, group=sex, fill="Demonstration Product"), color="gray70", stat="identity")+
-  geom_bar(aes(y=sf, group=sex, fill="Summary File 1"), color="gray10", stat="identity")+
-  scale_y_continuous(labels = abs_comma)+
-  scale_fill_manual(breaks=c("Demonstration Product", "Summary File 1"),values=c(rgb(0,.6,.9,alpha=.5), NA), labels=c("Demonstration Product", "Summary File 1"), name="")+
-  coord_flip()+
-  theme_minimal()+
-  theme(plot.title = element_text(hjust = 0.5),
-        legend.position="left",
-        axis.title.y = element_blank(),
-        axis.text.y = element_blank())+
-  labs(title="Male",
-       x="Age",
-       y="Population")
-m  
-
-f=age_dat%>%
-  filter(sex=="Female")%>%
-  ggplot(aes(x=age_cat))+
-  geom_bar(aes(y=dp, group=sex, fill="Demonstration Product"), color="gray70", fill=rgb(0,.6,.9,alpha=.5), stat="identity")+
-  geom_bar(aes(y=sf, group=sex, fill="Summary File 1"), color="gray10", fill=NA, stat="identity")+
-  scale_y_continuous(labels = abs_comma)+
-  coord_flip()+
-  theme_minimal()+
-  theme(plot.title = element_text(hjust = 0.5))+
-  labs(title="Female",
-       x="Age",
-       y="Population",
-       caption="Source: U.S. Census Bureau's 2010 Demonstration Data Products. Accessed via IPUMS NHGIS, University of Minnesota, December 2019.")
-
-f  
+# m=age_dat%>%
+#   filter(sex=="Male")%>%
+#   ggplot(aes(x=age_cat))+
+#   geom_bar(aes(y=dp, group=sex, fill="Demonstration Product"), color="gray70", stat="identity")+
+#   geom_bar(aes(y=sf, group=sex, fill="Summary File 1"), color="gray10", stat="identity")+
+#   scale_y_continuous(labels = abs_comma)+
+#   scale_fill_manual(breaks=c("Demonstration Product", "Summary File 1"),values=c(rgb(0,.6,.9,alpha=.5), NA), labels=c("Demonstration Product", "Summary File 1"), name="")+
+#   coord_flip()+
+#   theme_minimal()+
+#   theme(plot.title = element_text(hjust = 0.5),
+#         legend.position="left",
+#         axis.title.y = element_blank(),
+#         axis.text.y = element_blank())+
+#   labs(title="Male",
+#        x="Age",
+#        y="Population")
+# m  
+# 
+# f=age_dat%>%
+#   filter(sex=="Female")%>%
+#   ggplot(aes(x=age_cat))+
+#   geom_bar(aes(y=dp, group=sex, fill="Demonstration Product"), color="gray70", fill=rgb(0,.6,.9,alpha=.5), stat="identity")+
+#   geom_bar(aes(y=sf, group=sex, fill="Summary File 1"), color="gray10", fill=NA, stat="identity")+
+#   scale_y_continuous(labels = abs_comma)+
+#   coord_flip()+
+#   theme_minimal()+
+#   theme(plot.title = element_text(hjust = 0.5))+
+#   labs(title="Female",
+#        x="Age",
+#        y="Population",
+#        caption="Source: U.S. Census Bureau's 2010 Demonstration Data Products. Accessed via IPUMS NHGIS, University of Minnesota, December 2019.")
+# 
+# f  
   
 
 # age_dat%>%
