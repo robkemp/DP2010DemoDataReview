@@ -55,7 +55,7 @@ mainPanel(
 	plotOutput("plots"),width=3)
 )
 )
-
+ 
 #HousingData<-read.table(file="https://raw.githubusercontent.com/edyhsgr/DP2010DemoDataReview_CA/master/long_dp14_160_CA.csv",header=TRUE,sep=",")
 PopData<-read.csv(file="long_dp1_050and160_WA.csv",header=TRUE,sep=",")
 
